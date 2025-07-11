@@ -47,15 +47,27 @@ def st7920_print(text):
     for c in text:
         st7920_write(ord(c), True)
         
+def st7920_print1(text):
+    st7920_write(0x90, False)
+    for c in text:
+        st7920_write(ord(c), True)
+        
+def st7920_print2(text):
+    st7920_write(0x88, False)
+    for c in text:
+        st7920_write(ord(c), True)
+        
 def st7920_scroll(text, delay_ms=300, width=16):
     padded = " " * width + text + " " * width  
     for i in range(len(padded) - width + 1):
-        st7920_write(0x88, False) #0x80 1ª line, 0x90 2ª line, 0x88 3ª line e 0x98 4ª line, 16 characters per line
+        st7920_write(0x98, False) #0x80 1ª line, 0x90 2ª line, 0x88 3ª line e 0x98 4ª line, 16 characters per line
         for c in padded[i:i+width]:
             st7920_write(ord(c), True)
         time.sleep_ms(delay_ms)
 
 st7920_init()
 st7920_print(" RP2040 SPI OK")
+st7920_print1(" Hello, World!")
+st7920_print2("  Micropython")
 while (1):
     st7920_scroll("RP2040 WITH ST7920 DISPLAY USING SPI SOFTWARE", delay_ms=50)
